@@ -37,20 +37,20 @@ async function getGame(req: Request, res: Response) {
 }
 
 async function postGame(req: Request, res: Response) {
-    const io = SocketService.getConnection();
+    const { io, socket } = SocketService.getConnection();
     const userID = get(req, 'user.userID', '');
 
     try {
         // added to queue users
-        await redis.rpush('queue', userID);
+        await redis.lpush('queue', userID);
         const countUsers  = await redis.llen('queue');
         
-        if(countUsers >= 2) {
-            const player1 =  Types.ObjectId(await redis.lpop('queue'));
-            const player2 =  Types.ObjectId(await redis.lpop('queue'));
+        if(countUsers > 2) {
+            const player1 =  await redis.lpop('queue');
+            const player2 =  await redis.lpop('queue');
 
             const gameCreated = await Games.create({ player1, player2 });
-            
+
             const game: IGameRedisType = { 
                 gameID: gameCreated._id, 
                 player1: gameCreated.player1,
@@ -61,22 +61,23 @@ async function postGame(req: Request, res: Response) {
                 winner: null
             };
 
-
             redis.set(`game:${game.gameID}`, JSON.stringify(game), 'ex', EXPIRES_GAME);
-            io.emit(CREATED_GAME_EVENT_WSS, responseWSS({ data: game }));
+            // TODO: TEMPORARY SOLUTIONS (clientsID)
+            io.emit(CREATED_GAME_EVENT_WSS, responseWSS({ data: game, clientsID: [player1, player2] }));
+
         }
 
         responseMessage(res, { message: '', status: 204 });
 
     } catch (e) {
-        responseErrorMessage(res, {status: 500, message: SOMETHING_WAS_WRONG_RESPONSE_TEXT});
+        responseErrorMessage(res, {status: 500, message: e});
     }
 
    
 }
 
 async function putGame(req: Request, res: Response) {
-    const io = SocketService.getConnection();
+    const { io, socket } = SocketService.getConnection();
     const gameID = req.params.id;
     const playerID = req['user'].userID;
     const turnID = req.body.turnID;
@@ -91,9 +92,9 @@ async function putGame(req: Request, res: Response) {
         const game: IGameRedisType = JSON.parse(rawGame);
 
         // check - whose move
-        // if(game.currentPlayerTurn !== playerID) {
-        //     return responseErrorMessage(res, { status: 400, message: IS_NOT_PLAYER_TURN_TEXT_ERROR});    
-        // }
+        if(game.currentPlayerTurn !== playerID) {
+            return responseErrorMessage(res, { status: 400, message: IS_NOT_PLAYER_TURN_TEXT_ERROR});    
+        }
 
         if(game.fieldTurns[`c${turnID}`] === '') {
             game.fieldTurns[`c${turnID}`] = playerID;
@@ -107,19 +108,23 @@ async function putGame(req: Request, res: Response) {
                 await Games.findByIdAndUpdate(gameID, { winner });
                 const score = MAX_SCRORE_FOR_THE_GAME - game.countTurns; 
                 await Users.findByIdAndUpdate(winner, { $inc: { rating: score }});
-                io.emit(FINISH_GAME_EVENT_WSS, responseWSS({ data: game }));
+                
+                // TODO: TEMPORARY SOLUTIONS (clientsID)                
+                io.emit(FINISH_GAME_EVENT_WSS, responseWSS({ data: game, clientsID: [String(game.player1), String(game.player2)] }));
                 redis.del(`game:${game.gameID}`);
+                
                 return responseMessage(res, { message: "", status: 204 });
-
             }
 
             if( game.countTurns >= 9) { // if the draw - is temporary solution
-                io.emit(FINISH_GAME_EVENT_WSS, responseWSS({ data: game }));
+                // TODO: TEMPORARY SOLUTIONS (clientsID)                
+                io.emit(FINISH_GAME_EVENT_WSS, responseWSS({ data: game,  clientsID: [String(game.player1), String(game.player2)] }));
                 redis.del(`game:${game.gameID}`);
             
             } else { 
                 redis.set(`game:${game.gameID}`, JSON.stringify(game));
-                io.emit(TURN_GAME_EVENT_WSS, responseWSS({ data: game }));
+                // TODO: TEMPORARY SOLUTIONS (clientsID)
+                io.emit(TURN_GAME_EVENT_WSS, responseWSS({ data: game,  clientsID: [String(game.player1), String(game.player2)]}));
             }
 
             return responseMessage(res, { message: "", status: 204 });

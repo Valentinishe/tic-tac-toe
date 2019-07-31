@@ -8,7 +8,7 @@ export const SECRET_JWT = 'some secret code...';
 export const EXPIRES_JWT = 1000 * 60 * 60 * 24; // (ms) - 1 day
 
 // GAMES
-export const EXPIRES_GAME = 60 + 10; //  (sec) - 10 minutes
+export const EXPIRES_GAME = 60 * 10; //  (sec) - 10 minutes
 export const MAX_SCRORE_FOR_THE_GAME = 10;
 
 // REDIS
@@ -18,5 +18,7 @@ export const REDIS_PORT = 6379;
 // SOCKET
 export const SOCKET_PORT = 3038; 
 
+// APP
+export const EXPRESS_PORT = 80; 
 
 
