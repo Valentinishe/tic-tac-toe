@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "commonjs",
+        "outDir": "./build",
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": "./src",
+        "paths": {
+            "@Types/*": ["types/*"],
+            "@Services/*": ["services/*"],
+            "@Schemas/*": ["schemas/*"],
+            "@Config/*": ["config/*"],
+            "@Controllers/*": ["controllers/*"],
+            "@Utils/*": ["utils/*"],
+            "@Validations/*": ["validations/*"],
+            "@Constants/*": ["constants/*"],
+            "@Middlewares/*": ["middlewares/*"]
+        }
+    }
+}
