@@ -1,21 +1,28 @@
 import { SOCKET_PORT } from '@Config/index';
+import { Socket, Server } from 'socket.io';
 
-let Socket;
+
+let SOCKET;
+let IO;
 
 
 class SocketService {
     static connection(app) {
-        const server = require('http').Server(app);
-        const io = require('socket.io')(server);
-        io.on('connection', function (socket) {
-            Socket = socket;
-        });
+
+        const server = require('http').createServer();
+
+        IO = require('socket.io')(server, { serveClient: false });
         server.listen(SOCKET_PORT);
+
+        IO.on('connection', function (socket: Socket) {
+            SOCKET = socket;
+        });
+
         
     }
 
-    static getConnection() {
-        return Socket;
+    static getConnection(): { socket: Socket, io: Server } {
+        return { socket: SOCKET, io: IO };
     }
 }
 

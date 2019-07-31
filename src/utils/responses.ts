@@ -42,9 +42,11 @@ function responseErrorMessage(res: Response, { status, message }: { status?: num
     .json({ message: message || BAD_REQUEST_RESPONSE_TEXT});
 }
 
-function responseWSS({ data }: { data: {} }) {
+// TODO: TEMPORARY SOLUTIONS (clientsID)
+function responseWSS({ data, clientsID }: { data: {}, clientsID: string[] }) {
   return {
-    data
+    data,
+    clientsID
   }
 }
 
