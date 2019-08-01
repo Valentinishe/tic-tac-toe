@@ -19,7 +19,9 @@ I hope you will like it)
 - install redis (run in terminal `brew install redis`)
 - install mongodb (run in terminal  `brew install mongodb`)
 
+
 - run `npm install`
+- r run `mongod` and `brew services start redis` in another tab terminal (it should work while the script is running `npm start`)
 - run `npm run migrate` - for create users
 - run `npm start` - for start server
 - run `npm run bot` - for start bot
