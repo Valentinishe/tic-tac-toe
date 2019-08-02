@@ -8,11 +8,8 @@
     "container:migrate": "ts-node-dev ./migrations/index.ts",
     "container:start": "ts-node-dev --respawn --transpileOnly server.ts",
     "container:bot": "ts-node-dev --respawn --transpileOnly bot.ts",
-    "start": "docker-compose up --build",
-    "bot": "docker exec -it server npm run container:bot",
-    "prod": "tsc && node ./build/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "migrate": "docker exec -it server npm run container:migrate"
+    "container:prod": "tsc && node ./build/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",

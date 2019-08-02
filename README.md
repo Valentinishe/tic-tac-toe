@@ -16,17 +16,15 @@ I hope you will like it)
 ### install 
 
 - install docker and run it in background.
-
 - clone repository and `cd ./tic-tac-toe`
-
-- run `npm run start` and wait message in console `MongdoDB Successfully conected` 
-
-    **Server is Done!**
+- run `docker-compose up --build` and wait message in console `Connected to MongoDB Successfully` 
+**Server is Done!**
 
 ### For testing bot, need:
-- run server (if it not run already, run command `npm run start)
-- run `npm run migrate` - for create users
-- run `npm run bot` - for start bot and wait states game.
+- run server (if it not run already)
+- run `docker exec -it server npm run container:migrate` - for create users (if they not already created)
+- run `docker exec -it server npm run container:bot` - for start a bots
+- Please wait and see in console on change states game.
 
 
  

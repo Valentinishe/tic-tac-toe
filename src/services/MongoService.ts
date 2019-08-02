@@ -11,7 +11,7 @@ class MongoDB {
     static connect(cb?: () => any) {
         mongoose.connect(MONGO_CONNECT, { useNewUrlParser: true }, function(err){
             if(err) return console.error("Error connection to MONGO DB", err);
-            console.log("Connect to MongoDB Successfully");
+            console.log("Connected to MongoDB Successfully");
             cb && cb();
         });
     }
