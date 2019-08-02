@@ -9,7 +9,6 @@ const { Users } = MongoService.getModels();
 async function getUsers(req: Request, res: Response) {
     // TODO: in future we add sorting, filters, pagination, etc
     const users = await Users.find();
-    res.json(users);
     responseList(res, { data: users });
 };
 
