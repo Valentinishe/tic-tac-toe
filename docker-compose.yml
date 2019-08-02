@@ -2,11 +2,10 @@ version: '3'
 services:
   app:
     container_name: server
-    # image: node:10-alpine
+    image: node:10-alpine
     restart: always
-    # command: sh -c "npm install && npm run container:start"
-    build: .
-    # working_dir: /var/www/myapp
+    command: sh -c "npm install && npm run container:start"
+    working_dir: /var/www/myapp
     volumes:
       - ".:/var/www/myapp"
     ports:
