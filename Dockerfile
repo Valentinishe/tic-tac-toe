@@ -1,5 +1,5 @@
 # Install node v10
-FROM node:10-alpine AS release  
+FROM node:10-alpine
 # Set the workdir /var/www/myapp
 WORKDIR /var/www/myapp
 
