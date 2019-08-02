@@ -7,14 +7,14 @@ import SocketService from '@Services/SocketService';
 // middlewares
 import { verifyTokenAndGetUser } from '@Middlewares/AuthMiddlewares';
 // utils
-import { EXPRESS_PORT } from '@Config/index';
+import { API_PORT } from '@Config/index';
 
 import Router from './router';
 
 const app: express.Application = express();
 
 MongoService.connect();
-SocketService.connection(app);
+SocketService.connection();
 
 app.use(bodyParser.json())
 app.use(verifyTokenAndGetUser);
@@ -22,7 +22,6 @@ app.use(verifyTokenAndGetUser);
 app.use('/', Router);
 
 
-
-app.listen(EXPRESS_PORT, function () {
-  console.log(`Example app listening on port ${EXPRESS_PORT}!`);
+app.listen(API_PORT, function () {
+  console.log(`Example app listening on port ${API_PORT}!`);
 });
