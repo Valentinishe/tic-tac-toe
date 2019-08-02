@@ -14,17 +14,19 @@ when developed this project
 
 I hope you will like it)
 ### install 
-- clone repository
- 
-- install redis (run in terminal `brew install redis`)
-- install mongodb (run in terminal  `brew install mongodb`)
 
+- install docker and run it in background.
 
-- run `npm install`
-- run `mongod` and `brew services start redis` in another tab terminal (it should work while the script is running `npm start`)
+- clone repository and `cd ./tic-tac-toe`
+
+- run `npm run start` and wait message in console `MongdoDB Successfully conected` 
+
+    **Server is Done!**
+
+### For testing bot, need:
+- run server (if it not run already, run command `npm run start)
 - run `npm run migrate` - for create users
-- run `npm start` - for start server
-- run `npm run bot` - for start bot
+- run `npm run bot` - for start bot and wait states game.
 
 
  
