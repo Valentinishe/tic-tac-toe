@@ -7,7 +7,7 @@ let IO;
 
 
 class SocketService {
-    static connection(app) {
+    static connection() {
 
         const server = require('http').createServer();
 

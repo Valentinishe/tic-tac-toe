@@ -1,0 +1,29 @@
+version: '3'
+services:
+  app:
+    container_name: server
+    image: node:10-alpine
+    restart: always
+    command: sh -c "npm install && npm run container:start"
+    working_dir: /var/www/myapp
+    volumes:
+      - ".:/var/www/myapp"
+    ports:
+      - "${API_PORT}:${API_PORT}"
+      - "${SOCKET_PORT}:${SOCKET_PORT}"
+
+    links:
+      - redis
+      - mongo
+  mongo:
+    container_name: mongoDB
+    image: 'mongo:4.0.11'
+    command: mongod --port ${MONGODB_PORT}
+    ports:
+      - "${MONGODB_PORT}:${MONGODB_PORT}"
+  redis:
+    container_name: redis
+    image: 'redis:5.0.5'
+    command: redis-server --port ${REDIS_PORT}
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"

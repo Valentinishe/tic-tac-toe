@@ -4,7 +4,7 @@ import { REDIS_HOST, REDIS_PORT } from '@Config/index'
 
 class RedisService {
     static connection():Redis {
-        return new RedisDB(REDIS_PORT,  REDIS_HOST);
+        return new RedisDB({ host: REDIS_HOST, port: +REDIS_PORT});
     }
 }
 

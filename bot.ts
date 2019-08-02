@@ -12,10 +12,11 @@ import MongoService from '@Services/MongoService';
 // utils
 import { LOGIN_ENDPOINT, GAME_ENDPOINT, GAMES_ENDPOINT } from '@Constants/routs';
 import { CREATED_GAME_EVENT_WSS, TURN_GAME_EVENT_WSS, FINISH_GAME_EVENT_WSS } from '@Constants/eventsWSS';
-import { SOCKET_PORT } from '@Config/index';
+import { SOCKET_PORT, SOCKET_HOST, API_HOST, API_PORT } from '@Config/index';
 
+const API = `${API_HOST}:${API_PORT}`;
+const WS_API = `${SOCKET_HOST}:${SOCKET_PORT}`;
 
-const API = 'http://127.0.0.1';
 const COUNT_GAMES = 10;
 
 
@@ -27,7 +28,7 @@ class Bot {
 
     constructor(Player, games) {
         this.countGamesMax = games;
-        this.socket = io.connect(`${API}:${SOCKET_PORT}`, {
+        this.socket = io.connect(WS_API, {
             autoConnect: true,
             query: {
               uuid: Player._id,
@@ -83,6 +84,7 @@ class Bot {
     public async _responseStartGameWSS(data: IGameRedisType) {
         this.player.games[String(data.gameID)] = data;
         if(data.currentPlayerTurn == this.player._id) {
+            console.log('CREATED_GAME_EVENT_WSS');
             this.renderTableInTerminal(data.fieldTurns, data.player1, data.player2);
             await this.turnGame(data.gameID);
         }
@@ -92,6 +94,7 @@ class Bot {
     public async _responseTurnGameWSS(data: IGameRedisType) {
         this.player.games[String(data.gameID)] = data;
         if(data.currentPlayerTurn == this.player._id) {
+            console.log('TURN_GAME_EVENT_WSS');
             this.renderTableInTerminal(data.fieldTurns, data.player1, data.player2);
             await this.turnGame(data.gameID);
         }
@@ -99,6 +102,7 @@ class Bot {
 
     public async _responseEndGameWSS(data: IGameRedisType) {
         this.countGames++;
+        console.log('FINISH_GAME_EVENT_WSS');
         this.renderTableInTerminal(data.fieldTurns, data.player1, data.player2);
         console.log('COUNT GAMES', this.countGames);
         if(this.countGames < this.countGamesMax) {

@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
-    "start": "ts-node-dev --respawn --transpileOnly server.ts",
-    "bot": "ts-node-dev --respawn --transpileOnly bot.ts",
-    "prod": "tsc && node ./build/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "migrate": "ts-node-dev ./migrations/index.ts"
+    "container:migrate": "ts-node-dev ./migrations/index.ts",
+    "container:start": "ts-node-dev --respawn --transpileOnly server.ts",
+    "container:bot": "ts-node-dev --respawn --transpileOnly bot.ts",
+    "container:prod": "tsc && node ./build/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "body-parser": "^1.19.0",
+    "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "express-validation-map": "^1.0.3",
     "ioredis": "^4.11.2",
